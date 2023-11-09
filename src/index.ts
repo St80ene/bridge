@@ -1,41 +1,27 @@
-import express, { Request, Response } from 'express';
-import { Sequelize, Dialect } from 'sequelize';
+import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
+import * as bodyParser from 'body-parser';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import './controllers/user.controller';
+import { container } from './inversify.config';
 
-// Create an instance of Express
-const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Set up the Sequelize connection
-const dialect: Dialect = process.env.DATABASE_DIALECT as Dialect;
-const sequelize = new Sequelize(
-  process.env.DATABASE_NAME!,
-  dialect,
-  process.env.DATABASE_PASSWORD!,
-  {
-    host: process.env.DATABASE_HOST!,
-    dialect,
-  }
-);
-
-// Check the connection
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch((error: any) => {
-    console.error('Unable to connect to the database:', error);
-  });
-
-// Set up your routes and other middleware
-// Example:
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+const server = new InversifyExpressServer(container, null, {
+  rootPath: '/api',
 });
 
-// Start the Express server
-const PORT = process.env.PORT || 5000;
+server.setConfig((app) => {
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  );
+  app.use(bodyParser.json());
+});
+
+let app = server.build();
 app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
