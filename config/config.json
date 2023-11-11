@@ -1,0 +1,14 @@
+{
+  "development": {
+    "url": "postgres://ziaxgkip:t4iskyCoSgDPqA_p_yxnpfIi7b4OZvQs@fanny.db.elephantsql.com/ziaxgkip",
+    "dialect": "postgres"
+  },
+  "test": {
+    "url": "postgres://ziaxgkip:t4iskyCoSgDPqA_p_yxnpfIi7b4OZvQs@fanny.db.elephantsql.com/ziaxgkip",
+    "dialect": "postgres"
+  },
+  "production": {
+    "url": "postgres://ziaxgkip:t4iskyCoSgDPqA_p_yxnpfIi7b4OZvQs@fanny.db.elephantsql.com/ziaxgkip",
+    "dialect": "postgres"
+  }
+}

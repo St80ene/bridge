@@ -1,27 +1,62 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { User } from '../db/models/user.model';
+import TYPES from '../constant/types';
 
-export interface ILandlord {
-  email: string;
-  name: string;
-}
+// export interface IUser {
+//   id?: string | number;
+//   fullName?: string;
+//   email?: string;
+//   role?: Role;
+// }
+
+// export interface IUpdateUser {
+//   id?: string | number;
+//   fullName?: string;
+//   email?: string;
+//   role?: Role;
+// }
 
 @injectable()
 export class UserService {
-  public getUsers() {
-    return 'users found';
+  constructor(@inject(TYPES.User) private userModel: typeof User) {}
+
+  public async getUsers() {
+    console.log('----- ', await this.userModel.findAll());
+    return await this.userModel.findAll();
   }
 
-  public getUser(id: string) {
-    return 'user found';
+  public async getUser(id: number | string) {
+    return await this.userModel.findByPk(id);
   }
 
-  public newUser() {
-    return 'user created';
+  public async createUser(userData: any) {
+    try {
+      const newUser = await this.userModel.create(userData);
+      return newUser;
+    } catch (error) {
+      // Handle error (e.g., duplicate email)
+      console.error('Error creating user:', error);
+      throw error;
+    }
   }
 
-  public updateUser(id: string) {}
+  public async updateUser(id: number | string, updatedData: any) {
+    const user = await this.userModel.findByPk(id);
+    if (user) {
+      await user.update(updatedData);
+      return user;
+    } else {
+      throw new Error('User not found');
+    }
+  }
 
-  public deleteUser(id: string): string {
-    return 'deleted';
+  public async deleteUser(id: number | string): Promise<string> {
+    const user = await this.userModel.findByPk(id);
+    if (user) {
+      await user.destroy();
+      return 'User deleted successfully';
+    } else {
+      throw new Error('User not found');
+    }
   }
 }

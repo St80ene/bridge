@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "sequelize:migrate": "sequelize db:migrate --models-path src/models --migrations-path src/db/migrations --config config/config.json",
+    "sequelize:seed": "sequelize db:seed:all --models-path src/models --seeders-path src/db/seeders --config config/config.json"
   },
   "repository": {
     "type": "git",

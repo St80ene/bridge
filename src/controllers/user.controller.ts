@@ -10,13 +10,15 @@ import { Request } from 'express';
 import TYPES from '../constant/types';
 import { UserService } from '../service/user.service';
 
-@controller('/user')
-export class LandlordController {
+@controller('/users')
+export class UserController {
   constructor(@inject(TYPES.UserService) private userService: UserService) {}
 
   @httpGet('/')
   public getUsers() {
-    return this.userService.getUsers();
+    this.userService.getUsers();
+
+    return { status: true };
   }
 
   @httpGet('/:id')
@@ -26,16 +28,16 @@ export class LandlordController {
 
   @httpPost('/')
   public newUser(request: Request) {
-    return this.userService.newUser();
+    return this.userService.createUser(request);
   }
 
   @httpPut('/:id')
   public updateUser(request: Request) {
-    return this.userService.updateUser(request.params.id);
+    return this.userService.updateUser(request.params.id, request);
   }
 
   @httpDelete('/:id')
-  public deleteUser(request: Request): string {
+  public deleteUser(request: Request): Promise<string> {
     return this.userService.deleteUser(request.params.id);
   }
 }

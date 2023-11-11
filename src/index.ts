@@ -8,20 +8,31 @@ import { container } from './inversify.config';
 
 const PORT = process.env.PORT || 5000;
 
-const server = new InversifyExpressServer(container, null, {
-  rootPath: '/api',
-});
+async function startServer() {
+  const server = new InversifyExpressServer(container, null, {
+    rootPath: '/api',
+  });
 
-server.setConfig((app) => {
-  app.use(
-    bodyParser.urlencoded({
-      extended: true,
-    })
-  );
-  app.use(bodyParser.json());
-});
+  server.setConfig((app) => {
+    app.use(
+      bodyParser.urlencoded({
+        extended: true,
+      })
+    );
+    app.use(bodyParser.json());
+  });
 
-let app = server.build();
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  const app = server.build();
+
+  try {
+    // Wait for the database to initialize
+    // await container.get<Promise<any>>(TYPES.Sequelize);
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error starting the server:', error);
+  }
+}
+
+startServer();
