@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { Sequelize } from 'sequelize';
 import TYPES from '../constant/types';
 import Config from '../config';
+import logger from '../logger';
 
 @injectable()
 export default class DatabaseDriver {
@@ -26,14 +27,18 @@ export default class DatabaseDriver {
 
     try {
       await this.sequelize.authenticate();
-      console.log(
+      logger.info(
         'DatabaseDriver: Connection to the database has been established successfully.'
       );
       return this.sequelize;
     } catch (error) {
-      console.error(
-        'DatabaseDriver: Unable to connect to the database:',
-        error
+      logger.error(
+        // @ts-ignore
+        `'DatabaseDriver: Unable to connect to the database:': ${error?.message}`,
+        {
+          // @ts-ignore
+          stack: error?.stack,
+        }
       );
       throw error;
     }
