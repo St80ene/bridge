@@ -46,15 +46,3 @@ export default class DatabaseDriver {
 }
 
 export { default as database } from './factory';
-
-// const database = new DatabaseDriver(process.env.DATABASE_URL);
-// export const db = database.init();
-// function inject(
-//   Config: any
-// ): (
-//   target: typeof DatabaseDriver,
-//   propertyKey: undefined,
-//   parameterIndex: 0
-// ) => void {
-//   throw new Error('Function not implemented.');
-// }
