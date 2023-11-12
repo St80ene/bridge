@@ -1,0 +1,14 @@
+{
+  "development": {
+    "url": "",
+    "dialect": "postgres"
+  },
+  "test": {
+    "url": "",
+    "dialect": "postgres"
+  },
+  "production": {
+    "url": "",
+    "dialect": "postgres"
+  }
+}
